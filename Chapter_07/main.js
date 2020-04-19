@@ -150,7 +150,7 @@ function goalOrientedRobot({ place, parcels }, route) {
   return { direction: route[0], memory: route.slice(1) };
 }
 
-// runRobot(VillageState.random(), goalOrientedRobot, []);
+runRobot(VillageState.random(), goalOrientedRobot, []);
 // Exercise 1 - Measure robots
 function runRobotAndMeasure(state, robot, memory) {
   for (let turn = 0; ; turn++) {
@@ -184,3 +184,31 @@ function compareRobots(robot1, memory1, robot2, memory2) {
 }
 
 compareRobots(routeRobot, [], goalOrientedRobot, []);
+
+// Exercise 2
+function smartGoalOrientedRobot({ place, parcels }, route) {
+  if (route.length == 0) {
+    let routes = parcels.map((parcel) => {
+      if (parcel.place != place) {
+        return {
+          route: findRoute(roadGraph, place, parcel.place),
+          pickUp: true,
+        };
+      } else {
+        return {
+          route: findRoute(roadGraph, place, parcel.address),
+          pickUp: false,
+        };
+      }
+    });
+
+    function score({ route, pickUp }) {
+      return (pickUp ? 0.5 : 0) - route.length;
+    }
+
+    route = routes.reduce((a, b) => (score(a) > score(b) ? a : b)).route;
+  }
+  return { direction: route[0], memory: route.slice(1) };
+}
+
+compareRobots(smartGoalOrientedRobot, [], goalOrientedRobot, []);
