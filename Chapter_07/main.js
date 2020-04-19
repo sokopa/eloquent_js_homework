@@ -151,3 +151,36 @@ function goalOrientedRobot({ place, parcels }, route) {
 }
 
 // runRobot(VillageState.random(), goalOrientedRobot, []);
+// Exercise 1 - Measure robots
+function runRobotAndMeasure(state, robot, memory) {
+  for (let turn = 0; ; turn++) {
+    if (state.parcels.length == 0) {
+      return turn;
+    }
+    let action = robot(state, memory);
+    state = state.move(action.direction);
+    memory = action.memory;
+  }
+}
+
+function compareRobots(robot1, memory1, robot2, memory2) {
+  let results1 = [],
+    results2 = [];
+  for (let i = 0; i < 100; i++) {
+    let test = VillageState.random();
+    results1.push(runRobotAndMeasure(test, robot1, memory1));
+    results2.push(runRobotAndMeasure(test, robot2, memory2));
+  }
+  console.log(
+    `Robot 1 had on average ${
+      results1.reduce((acc, curr) => acc + curr) / results1.length
+    } turns`
+  );
+  console.log(
+    `Robot 2 had on average ${
+      results2.reduce((acc, curr) => acc + curr) / results2.length
+    } turns`
+  );
+}
+
+compareRobots(routeRobot, [], goalOrientedRobot, []);
