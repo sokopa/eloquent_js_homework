@@ -220,3 +220,35 @@ console.log(parse('a # one\n   # two\n()'));
 // → {type: "apply",
 //    operator: {type: "word", name: "a"},
 //    args: []}
+
+specialForms.set = (args, scope) => {
+  if (args.length != 2 || args[0].type != 'word') {
+    throw new SyntaxError('Incorrect use of define');
+  }
+  let scopeToSearch = scope;
+  do {
+    if (scopeToSearch == null) {
+      throw new ReferenceError(
+        `Variable ${args[0].name} has not been defined yet`
+      );
+    }
+    if (Object.prototype.hasOwnProperty.call(scopeToSearch, args[0].name)) {
+      break;
+    }
+    scopeToSearch = Object.getPrototypeOf(scopeToSearch);
+  } while (true);
+
+  let value = evaluate(args[1], scope);
+  scopeToSearch[args[0].name] = value;
+  return value;
+};
+
+run(`
+do(define(x, 4),
+   define(setx, fun(val, set(x, val))),
+   setx(50),
+   print(x))
+`);
+// → 50
+run(`set(quux, true)`);
+// → Some kind of ReferenceError
