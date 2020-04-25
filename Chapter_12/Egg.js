@@ -23,10 +23,10 @@ function parseExpression(program) {
   return parseApply(expr, program.slice(match[0].length));
 }
 
+// Exercise 3 (Comments): modified skipSpace to also skip comments
 function skipSpace(string) {
-  let first = string.search(/\S/);
-  if (first == -1) return '';
-  return string.slice(first);
+  let eatThis = string.match(/^(\s|#.*)*/);
+  return string.slice(eatThis[0].length);
 }
 
 function parseApply(expr, program) {
@@ -184,3 +184,39 @@ do(define(pow, fun(base, exp,
    print(pow(2, 10)))
 `);
 // → 1024
+
+// Exercise 1
+// Modify these definitions...
+
+topScope.array = (...args) => {
+  return args;
+};
+
+topScope.length = (array) => {
+  return array.length;
+};
+
+topScope.element = (array, n) => {
+  return array[n];
+};
+
+run(`
+do(define(sum, fun(array,
+     do(define(i, 0),
+        define(sum, 0),
+        while(<(i, length(array)),
+          do(define(sum, +(sum, element(array, i))),
+             define(i, +(i, 1)))),
+        sum))),
+   print(sum(array(1, 2, 3))))
+`);
+// → 6
+
+// Exercise 3 Test Cases
+console.log(parse('# hello\nx'));
+// → {type: "word", name: "x"}
+
+console.log(parse('a # one\n   # two\n()'));
+// → {type: "apply",
+//    operator: {type: "word", name: "a"},
+//    args: []}
