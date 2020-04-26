@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Mountains</h1>
+
+    <div id="mountains"></div>
+
+    <script>
+      const MOUNTAINS = [
+        { name: 'Kilimanjaro', height: 5895, place: 'Tanzania' },
+        { name: 'Everest', height: 8848, place: 'Nepal' },
+        { name: 'Mount Fuji', height: 3776, place: 'Japan' },
+        { name: 'Vaalserberg', height: 323, place: 'Netherlands' },
+        { name: 'Denali', height: 6168, place: 'United States' },
+        { name: 'Popocatepetl', height: 5465, place: 'Mexico' },
+        { name: 'Mont Blanc', height: 4808, place: 'Italy/France' },
+      ];
+
+      // Your code here
+      let parentElement = document.getElementById('mountains');
+      let table = document.createElement('table');
+      let firstRow = document.createElement('tr');
+      let headers = Object.keys(MOUNTAINS[0]);
+      headers.forEach((h) => {
+        let th = document.createElement('th');
+        th.appendChild(document.createTextNode(h));
+        firstRow.appendChild(th);
+      });
+      table.appendChild(firstRow);
+
+      MOUNTAINS.forEach((mnt) => {
+        let row = document.createElement('tr');
+        for (let value of Object.values(mnt)) {
+          let data = document.createElement('td');
+          data.appendChild(document.createTextNode(value));
+          if (typeof value == 'number') {
+            data.style.textAlign = 'right';
+          }
+          row.appendChild(data);
+        }
+        table.appendChild(row);
+      });
+
+      parentElement.appendChild(table);
+    </script>
+  </body>
+</html>
