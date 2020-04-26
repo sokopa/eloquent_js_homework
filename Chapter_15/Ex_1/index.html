@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <p id="balloon">🎈</p>
+
+    <script>
+      // Your code here
+      let balloonSize = 10;
+      let balloon = document.getElementById('balloon');
+      setBaloonSize(balloon, balloonSize);
+      window.addEventListener('keydown', onKeyDown);
+
+      function onKeyDown(event) {
+        if (event.key == 'ArrowUp') {
+          balloonSize *= 1.1;
+          setBaloonSize(balloon, balloonSize);
+          if (balloonSize > 50) {
+            balloon.textContent = '💥';
+            window.removeEventListener('keydown', onKeyDown);
+          }
+        }
+        if (event.key == 'ArrowDown') {
+          balloonSize *= 0.9;
+          setBaloonSize(balloon, balloonSize);
+        }
+      }
+
+      function setBaloonSize(element, value) {
+        element.style.fontSize = value + 'px';
+      }
+    </script>
+  </body>
+</html>
