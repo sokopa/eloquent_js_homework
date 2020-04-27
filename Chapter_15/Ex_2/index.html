@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <style>
+      .trail {
+        /* className for the trail elements */
+        position: absolute;
+        height: 6px;
+        width: 6px;
+        border-radius: 3px;
+        background: teal;
+      }
+      body {
+        height: 300px;
+      }
+    </style>
+
+    <script>
+      // Your code here.
+      let elements = [];
+      let index = 0;
+      for (let i = 0; i < 10; i++) {
+        let div = document.createElement('div');
+        div.className = 'trail';
+        document.body.appendChild(div);
+        elements.push(div);
+      }
+
+      window.addEventListener('mousemove', (evt) => {
+        let dot = elements[index];
+        let movedLeft = evt.movementX < 0 ? -1 : 1;
+        let movedUp = evt.movementY < 0 ? -1 : 1;
+        dot.style.left = event.pageX - movedLeft * 3 + 'px';
+        dot.style.top = event.pageY - movedUp * 3 + 'px';
+        index = (index + 1) % elements.length;
+      });
+    </script>
+  </body>
+</html>
