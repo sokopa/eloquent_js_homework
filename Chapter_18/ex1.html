@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Exercise 1</title>
+  </head>
+  <body>
+    <script>
+      fetch('https://eloquentjavascript.net/author', {
+        headers: { Accept: 'text/plain' },
+      })
+        .then((r) => {
+          console.log(r.status);
+          return r.text();
+        })
+        .then(console.log);
+
+      fetch('https://eloquentjavascript.net/author', {
+        headers: { Accept: 'text/html' },
+      })
+        .then((r) => {
+          console.log(r.status);
+          return r.text();
+        })
+        .then(console.log);
+
+      fetch('https://eloquentjavascript.net/author', {
+        headers: { Accept: 'application/json' },
+      })
+        .then((r) => {
+          console.log(r.status);
+          return r.text();
+        })
+        .then(console.log);
+
+      fetch('https://eloquentjavascript.net/author', {
+        headers: { Accept: 'application/rainbows+unicorns' },
+      }).then((r) => console.log(r.status));
+    </script>
+  </body>
+</html>
