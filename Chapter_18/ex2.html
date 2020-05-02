@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Exercise 2</title>
+  </head>
+  <body>
+    <textarea id="code">return "hi";</textarea>
+    <button id="button">Run</button>
+    <pre id="output"></pre>
+
+    <script>
+      let text = document.getElementById('code');
+      let btn = document.getElementById('button');
+      let out = document.getElementById('output');
+
+      btn.addEventListener('click', onClick);
+
+      function onClick() {
+        let code = text.value;
+        let fn = new Function(code);
+        try {
+          let res = fn();
+          out.innerText = res;
+        } catch (err) {
+          out.innterText = err;
+        }
+      }
+    </script>
+  </body>
+</html>
