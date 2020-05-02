@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chapter 17 - Shapes</title>
+  </head>
+  <body>
+    <canvas width="800" height="200"></canvas>
+    <script>
+      let cx = document.querySelector('canvas').getContext('2d');
+
+      function drawTrapezoid(
+        context,
+        centerX,
+        centerY,
+        topSide,
+        bottomSide,
+        height
+      ) {
+        context.beginPath();
+        var ax = centerX - topSide / 2;
+        var ay = centerY - height / 2;
+        var bx = ax + topSide;
+        var by = ay;
+        var cx = centerX + bottomSide / 2;
+        var cy = centerY + height / 2;
+        var dx = cx - bottomSide;
+        var dy = cy;
+        context.moveTo(ax, ay);
+        context.lineTo(bx, by);
+        context.lineTo(cx, cy);
+        context.lineTo(dx, dy);
+        context.closePath();
+        context.stroke();
+      }
+
+      function drawDiamond(context, startX, startY, width, height) {
+        context.translate(startX + width / 2, startY + height / 2);
+        context.rotate(Math.PI / 4);
+
+        context.fillStyle = 'red';
+        context.fillRect(-width / 2, -height / 2, width, height);
+        context.resetTransform();
+      }
+
+      function drawZigZag(context, x, y, w, h, count) {
+        context.moveTo(x, y);
+        for (let i = 0; i < count; i++) {
+          context.lineTo(x + w, y + i * h + h / 2);
+          context.lineTo(x, y + i * h + h);
+        }
+        context.stroke();
+      }
+
+      function drawSpiral(cx, x, y, radius) {
+        cx.beginPath();
+        cx.moveTo(x, y);
+        for (let i = 0; i < 300; i++) {
+          let angle = (i * Math.PI) / 30;
+          let dist = (radius * i) / 200;
+          cx.lineTo(x + Math.cos(angle) * dist, y + Math.sin(angle) * dist);
+        }
+        cx.stroke();
+      }
+
+      function drawStar(cx, x, y, radius, points) {
+        var angleBetweenPoints = (Math.PI * 2) / points;
+        let currentAngle = 0;
+        cx.beginPath();
+        cx.moveTo(x + radius, y);
+        for (let i = 0; i < points; i++) {
+          var ex = x + Math.cos(currentAngle + angleBetweenPoints) * radius;
+          var ey = y + Math.sin(currentAngle + angleBetweenPoints) * radius;
+
+          cx.quadraticCurveTo(x, y, ex, ey);
+
+          currentAngle += angleBetweenPoints;
+        }
+        cx.closePath();
+        cx.fillStyle = 'yellow';
+        cx.fill();
+      }
+
+      drawTrapezoid(cx, 50, 100, 40, 100, 100);
+      drawDiamond(cx, 150, 50, 50, 60);
+      drawZigZag(cx, 250, 40, 70, 15, 8);
+      drawSpiral(cx, 420, 75, 50);
+      drawStar(cx, 600, 75, 50, 13);
+    </script>
+  </body>
+</html>
