@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CH17-Ex3</title>
+  </head>
+  <body>
+    <canvas width="400" height="400"></canvas>
+    <script>
+      let cx = document.querySelector('canvas').getContext('2d');
+
+      class Vec {
+        constructor(x, y) {
+          this.x = x;
+          this.y = y;
+        }
+        plus(other) {
+          return new Vec(this.x + other.x, this.y + other.y);
+        }
+        times(factor) {
+          return new Vec(this.x * factor, this.y * factor);
+        }
+      }
+
+      let lastTime = null;
+      function frame(time) {
+        if (lastTime != null) {
+          updateAnimation(Math.min(100, time - lastTime) / 1000);
+        }
+        lastTime = time;
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+
+      const radius = 10;
+      let speed = new Vec(467, 773);
+      let position = new Vec(100, 300);
+      function updateAnimation(step) {
+        cx.clearRect(0, 0, 400, 400);
+        cx.strokeStyle = 'blue';
+        cx.lineWidth = 4;
+        cx.strokeRect(25, 25, 350, 350);
+
+        position = position.plus(speed.times(step));
+        if (position.x < 25 + radius || position.x > 375 - radius)
+          speed = new Vec(-speed.x, speed.y);
+        if (position.y < 25 + radius || position.y > 375 - radius)
+          speed = new Vec(speed.x, -speed.y);
+        cx.fillStyle = 'red';
+        cx.beginPath();
+        cx.arc(position.x, position.y, radius, 0, 7);
+        cx.fill();
+      }
+    </script>
+  </body>
+</html>
