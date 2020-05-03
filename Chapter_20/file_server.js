@@ -2,7 +2,7 @@ const { createServer } = require('http');
 const { parse } = require('url');
 const { resolve, sep } = require('path');
 const { createReadStream, createWriteStream } = require('fs');
-const { stat, readdir, rmdir, unlink } = require('fs').promises;
+const { stat, readdir, rmdir, unlink, mkdir } = require('fs').promises;
 const mime = require('mime');
 
 const methods = Object.create(null);
@@ -81,4 +81,20 @@ methods.PUT = async function (request) {
   let path = urlPath(request.url);
   await pipeStream(request, createWriteStream(path));
   return { status: 204 };
+};
+
+methods.MKCOL = async function (request) {
+  let path = urlPath(request.url);
+  let stats;
+  try {
+    stats = await stat(path);
+  } catch (error) {
+    if (error.code != 'ENOENT') throw error;
+    else {
+      await mkdir(path);
+      return { status: 204 };
+    }
+  }
+  if (stats.isDirectory()) return { status: 204 };
+  return { status: 400 };
 };
