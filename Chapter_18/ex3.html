@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Conway Game of Life</title>
+  </head>
+  <body>
+    <div id="grid"></div>
+    <button id="next">Next generation</button>
+
+    <script>
+      const w = 35,
+        h = 20;
+      let grid = document.querySelector('#grid');
+      let cells = [];
+      for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+          let box = document.createElement('input');
+          box.type = 'checkbox';
+          grid.appendChild(box);
+          cells.push(box);
+        }
+        grid.appendChild(document.createElement('br'));
+      }
+
+      function randomGrid() {
+        let res = [];
+        for (let i = 0; i < w * h; i++) {
+          res.push(Math.random() < 0.3);
+        }
+        return res;
+      }
+
+      function gridFromCells() {
+        return cells.map((cell) => cell.checked);
+      }
+
+      function cellsFromGrid(grid) {
+        grid.forEach((val, i) => (cells[i].checked = val));
+      }
+
+      function countAdjacent(grid, x, y) {
+        let count = 0;
+        for (let j = Math.max(0, y - 1); j < Math.min(h - 1, y + 1); j++)
+          for (let i = Math.max(0, x - 1); i < Math.min(w - 1, x + 1); i++) {
+            if ((i != x || j != y) && grid[i + w * j]) count++;
+          }
+        return count;
+      }
+
+      function runOneGeneration(grid) {
+        let newGrid = new Array(w * h);
+        for (let y = 0; y < h; y++) {
+          for (let x = 0; x < w; x++) {
+            let neighbors = countAdjacent(grid, x, y);
+            let offset = x + y * w;
+            if (neighbors < 2 || neighbors > 3) {
+              newGrid[offset] = false;
+            } else if (neighbors == 2) {
+              newGrid[offset] = grid[offset];
+            } else {
+              newGrid[offset] = true;
+            }
+          }
+        }
+        return newGrid;
+      }
+
+      function oneTurn() {
+        cellsFromGrid(runOneGeneration(gridFromCells()));
+      }
+
+      cellsFromGrid(randomGrid());
+      document.querySelector('#next').addEventListener('click', oneTurn);
+    </script>
+  </body>
+</html>
