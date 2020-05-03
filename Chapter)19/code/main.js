@@ -39,7 +39,7 @@ function elt(type, props, ...children) {
   return dom;
 }
 
-const scale = 10;
+const scale = 5;
 class PictureCanvas {
   constructor(picture, pointerDown) {
     this.dom = elt('canvas', {
@@ -356,7 +356,7 @@ class UndoButton {
 const startState = {
   tool: 'draw',
   color: '#000000',
-  picture: Picture.empty(60, 30, '#f0f0f0'),
+  picture: Picture.empty(120, 80, '#f0f0f0'),
   done: [],
   doneAt: 0,
 };
@@ -384,4 +384,34 @@ function startPixelEditor({
     },
   });
   return app.dom;
+}
+
+function circle(start, state, dispatch) {
+  function drawCircle(pos) {
+    let radius = Math.sqrt(
+      Math.pow(start.x - pos.x, 2) + Math.pow(start.y - pos.y, 2)
+    );
+    let radiusC = Math.ceil(radius);
+    let drawn = [];
+    for (
+      let y = Math.max(start.y - radiusC, 0);
+      y <= Math.min(start.y + radiusC, state.picture.height);
+      y++
+    ) {
+      for (
+        let x = Math.max(start.x - radiusC, 0);
+        x <= Math.min(start.x + radiusC, state.picture.width);
+        x++
+      ) {
+        if (
+          Math.sqrt(Math.pow(start.x - x, 2) + Math.pow(start.y - y, 2)) <=
+          radius
+        )
+          drawn.push({ x, y, color: state.color });
+      }
+    }
+    dispatch({ picture: state.picture.draw(drawn) });
+  }
+  drawCircle(start);
+  return drawCircle;
 }

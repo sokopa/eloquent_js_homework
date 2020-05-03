@@ -9,7 +9,11 @@
   <body>
     <div></div>
     <script>
-      document.querySelector('div').appendChild(startPixelEditor({}));
+      document
+        .querySelector('div')
+        .appendChild(
+          startPixelEditor({ tools: Object.assign({}, baseTools, { circle }) })
+        );
     </script>
   </body>
 </html>
